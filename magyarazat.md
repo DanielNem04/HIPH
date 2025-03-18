@@ -107,7 +107,7 @@ Az áhított mennyiség: $|\rho|=\displaystyle \sqrt{(\rho_{out}^{LCMS})^2+(\rho
 
 A szereplő mennyiségek: 
 
-$$\rho_{out}^{LCMS} = x \cdot \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}} + y \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}  - \dfrac{\displaystyle \sqrt{K_x^2 + K_y^2}}{K_0^2 -K_z^2}(K_0t-K_zz)$$
+$$\rho_{out}^{LCMS} = x \cdot \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}} + y \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}  - \dfrac{\displaystyle \sqrt{K_x^2 + K_y^2}}{K_0^2 -K_z^2}\cdot \left(K_0t-K_zz\right)$$
 
 $$ \rho_{side}^{LCMS} = -x \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}+y\cdot  \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}}$$
 
