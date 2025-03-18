@@ -117,3 +117,30 @@ $$K^{\mu}= \dfrac{1}{2} (p_1^{\mu}+p_2^{\mu} ) $$
 
 Ezután ezen függvényeket dekralártam cpp-ban!
 
+```cpp
+#include <cmath>
+#include <tuple>
+
+struct FourVector {
+    double t, x, y, z;
+};
+
+FourVector compute_K(const FourVector& p1, const FourVector& p2) {
+    return {0.5 * (p1.t + p2.t), 0.5 * (p1.x + p2.x), 0.5 * (p1.y + p2.y), 0.5 * (p1.z + p2.z)};
+}
+
+std::tuple<double, double, double> compute_rho_LCMS(double x, double y, double z, double t, const FourVector& K) {
+    double K_x = K.x;
+    double K_y = K.y;
+    double K_z = K.z;
+    double K_0 = K.t;
+    double K_perp = std::sqrt(K_x * K_x + K_y * K_y);
+    double K_long = std::sqrt(K_0 * K_0 - K_z * K_z);
+    
+    double rho_out = (x * K_x / K_perp) + (y * K_y / K_perp) - (K_perp / K_long) * (K_0 * t - K_z * z);
+    double rho_side = (-x * K_y / K_perp) + (y * K_x / K_perp);
+    double rho_long = (K_0 * z - K_z * t) / K_long;
+    
+    return {rho_out, rho_side, rho_long};
+}
+```
