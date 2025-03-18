@@ -107,13 +107,13 @@ Az áhított mennyiség: $|\rho|=\displaystyle \sqrt{(\rho_{out}^{LCMS})^2+(\rho
 
 A szereplő mennyiségek: 
 
-$$\rho_{out}^{LCMS} = x \cdot \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}} + y \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}  - \dfrac{\displaystyle \sqrt{K_x^2 + K_y^2}}{K_0^2 -K_z^2}\cdot \left(K_0t-K_zz\right)$$
+$$\rho_{out}^{LCMS} = r_x \cdot \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}} + r_y \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}  - \dfrac{\displaystyle \sqrt{K_x^2 + K_y^2}}{K_0^2 -K_z^2}\cdot \left(K_0t-K_z r_z\right)$$
 
-$$ \rho_{side}^{LCMS} = -x \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}+y\cdot  \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}}$$
+$$ \rho_{side}^{LCMS} = -r_x \cdot \dfrac{K_y}{\displaystyle \sqrt{K_x^2 + K_y^2}}+r_y\cdot  \dfrac{K_x}{\displaystyle \sqrt{K_x^2 + K_y^2}}$$
 
-$$  \rho_{long}^{LCMS} = \dfrac{K_0 z -K_zt}{\displaystyle \sqrt{K_0^2 -K_z^2}}$$
+$$  \rho_{long}^{LCMS} = \dfrac{K_0 r_z -K_zt}{\displaystyle \sqrt{K_0^2 -K_z^2}}$$
 
-$$K^{\mu}= \dfrac{1}{2} (p_1^{\mu}+p_2^{\mu} ) $$
+$$K^{\mu}= \dfrac{1}{2} (p_1^{\mu}+p_2^{\mu} ), \quad r_x=\sqrt{x_1^2-x_2^2} $$
 
 Ezután ezen függvényeket dekralártam cpp-ban!
 
