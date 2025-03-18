@@ -125,11 +125,28 @@ struct FourVector {
     double t, x, y, z;
 };
 
-FourVector compute_K(const FourVector& p1, const FourVector& p2) {
-    return {0.5 * (p1.t + p2.t), 0.5 * (p1.x + p2.x), 0.5 * (p1.y + p2.y), 0.5 * (p1.z + p2.z)};
+struct Particle {
+    double m, px, py, pz, x, y, z;
+};
+
+FourVector compute_K(const Particle& p1, const Particle& p2) {
+    return {0.5 * (std::sqrt(p1.m * p1.m + p1.px * p1.px + p1.py * p1.py + p1.pz * p1.pz) +
+                   std::sqrt(p2.m * p2.m + p2.px * p2.px + p2.py * p2.py + p2.pz * p2.pz)),
+            0.5 * (p1.px + p2.px),
+            0.5 * (p1.py + p2.py),
+            0.5 * (p1.pz + p2.pz)};
 }
 
-std::tuple<double, double, double> compute_rho_LCMS(double x, double y, double z, double t, const FourVector& K) {
+double compute_r_x(const Particle& p1, const Particle& p2) {
+    return std::sqrt(p1.x * p1.x - p2.x * p2.x);
+}
+
+std::tuple<double, double, double> compute_rho_LCMS(const Particle& p1, const Particle& p2, double t) {
+    FourVector K = compute_K(p1, p2);
+    double r_x = compute_r_x(p1, p2);
+    double r_y = p1.y - p2.y;
+    double r_z = p1.z - p2.z;
+    
     double K_x = K.x;
     double K_y = K.y;
     double K_z = K.z;
@@ -137,9 +154,9 @@ std::tuple<double, double, double> compute_rho_LCMS(double x, double y, double z
     double K_perp = std::sqrt(K_x * K_x + K_y * K_y);
     double K_long = std::sqrt(K_0 * K_0 - K_z * K_z);
     
-    double rho_out = (x * K_x / K_perp) + (y * K_y / K_perp) - (K_perp / K_long) * (K_0 * t - K_z * z);
-    double rho_side = (-x * K_y / K_perp) + (y * K_x / K_perp);
-    double rho_long = (K_0 * z - K_z * t) / K_long;
+    double rho_out = (r_x * K_x / K_perp) + (r_y * K_y / K_perp) - (K_perp / K_long) * (K_0 * t - K_z * r_z);
+    double rho_side = (-r_x * K_y / K_perp) + (r_y * K_x / K_perp);
+    double rho_long = (K_0 * r_z - K_z * t) / K_long;
     
     return {rho_out, rho_side, rho_long};
 }
