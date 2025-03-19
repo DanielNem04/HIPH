@@ -118,46 +118,6 @@ $$K^{\mu}= \dfrac{1}{2} (p_1^{\mu}+p_2^{\mu} ), \quad r_x=\sqrt{x_1^2-x_2^2} $$
 Ezután ezen függvényeket dekralártam cpp-ban!
 
 ```cpp
-#include <cmath>
-#include <tuple>
 
-struct FourVector {
-    double t, x, y, z;
-};
 
-struct Particle {
-    double m, px, py, pz, x, y, z;
-};
-
-FourVector compute_K(const Particle& p1, const Particle& p2) {
-    return {0.5 * (std::sqrt(p1.m * p1.m + p1.px * p1.px + p1.py * p1.py + p1.pz * p1.pz) +
-                   std::sqrt(p2.m * p2.m + p2.px * p2.px + p2.py * p2.py + p2.pz * p2.pz)),
-            0.5 * (p1.px + p2.px),
-            0.5 * (p1.py + p2.py),
-            0.5 * (p1.pz + p2.pz)};
-}
-
-double compute_r_x(const Particle& p1, const Particle& p2) {
-    return std::sqrt(p1.x * p1.x - p2.x * p2.x);
-}
-
-double compute_rho_LCMS(const Particle& p1, const Particle& p2, double t) {
-    FourVector K = compute_K(p1, p2);
-    double r_x = compute_r_x(p1, p2);
-    double r_y = p1.y - p2.y;
-    double r_z = p1.z - p2.z;
-    
-    double K_x = K.x;
-    double K_y = K.y;
-    double K_z = K.z;
-    double K_0 = K.t;
-    double K_perp = std::sqrt(K_x * K_x + K_y * K_y);
-    double K_long = std::sqrt(K_0 * K_0 - K_z * K_z);
-    
-    double rho_out = (r_x * K_x / K_perp) + (r_y * K_y / K_perp) - (K_perp / K_long) * (K_0 * t - K_z * r_z);
-    double rho_side = (-r_x * K_y / K_perp) + (r_y * K_x / K_perp);
-    double rho_long = (K_0 * r_z - K_z * t) / K_long;
-    double result = std::sqrt(rho_out*rho_out+ rho_side*rho_side+ rho_long*rho_long);
-    return result;
-}
 ```
