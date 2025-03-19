@@ -214,4 +214,4 @@ Szűrtem hogy csak a 0.99 fm-nél nagyobb $\rho$-k esetén plottoltam de így se
 
 A kapott ábra:
 
-![]{D_rho_plot.png}
+![Kapott eloszlás]{D_rho_plot.png}
