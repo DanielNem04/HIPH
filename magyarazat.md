@@ -155,6 +155,33 @@ double compute_rho_LCMS(const Particle& p1, const Particle& p2) {
 
     return std::sqrt(rho_out * rho_out + rho_side * rho_side + rho_long * rho_long);
 }
+```
 
+
+Ezután maga a számoló ciklus(ok):
+
+```cpp
+  int nEntries = tree->GetEntries();
+  
+  for (int iEvent = 0; iEvent < nEntries; iEvent++) {
+    tree->GetEntry(iEvent);
+    std::cerr << "Processing event " << iEvent << " with " << np << " particles." << std::endl;
+
+    std::vector<Particle> particles;
+    particles.reserve(np);
+
+    for (int i = 0; i < np; i++) {
+        particles.push_back({mass[i], px[i], py[i], pz[i], x[i], y[i], z[i], t[i]});
+        }
+        
+        std::vector<double> rho_values;
+        
+        for (int i = 0; i < np - 1; i++) {
+            for (int j = i + 1; j < np; j++) {
+                rho_values.push_back(compute_rho_LCMS(particles[i], particles[j]));
+                }
+                }
+                std::cerr << "Computed " << rho_values.size() << " rho values." << std::endl;
+                }
 
 ```
