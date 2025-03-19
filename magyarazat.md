@@ -210,4 +210,8 @@ Ezután maga a számoló ciklus(ok):
     c1->SaveAs("D_rho_plot.png");
 ```
 
-Szűrtem hogy csak a 0.99 fm-nél nagyobb $\rho$-k esetén plottoltam de így sem kaptam olyan szép ábrát mint a kapott jegyzetben.
+Szűrtem hogy csak a 0.99 fm-nél nagyobb $\rho$-k esetén plottoltam de így sem kaptam olyan szép ábrát mint a kapott [jegyzetben]{https://arxiv.org/pdf/2409.10373} . 
+
+A kapott ábra:
+
+![]{}
