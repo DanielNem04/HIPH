@@ -119,5 +119,42 @@ Ezután ezen függvényeket dekralártam cpp-ban!
 
 ```cpp
 
+struct FourVector {
+    double t, x, y, z;
+};
+
+struct Particle {
+    double m, px, py, pz, x, y, z, t;
+};
+
+FourVector compute_K(const Particle& p1, const Particle& p2) {
+    return {0.5 * (std::sqrt(p1.m * p1.m + p1.px * p1.px + p1.py * p1.py + p1.pz * p1.pz) +
+                   std::sqrt(p2.m * p2.m + p2.px * p2.px + p2.py * p2.py + p2.pz * p2.pz)),
+            0.5 * (p1.px + p2.px),
+            0.5 * (p1.py + p2.py),
+            0.5 * (p1.pz + p2.pz)};
+}
+
+double compute_r_x(const Particle& p1, const Particle& p2) {
+    return std::sqrt(p1.x * p1.x - p2.x * p2.x);
+}
+
+double compute_rho_LCMS(const Particle& p1, const Particle& p2) {
+    FourVector K = compute_K(p1, p2);
+    double r_x = compute_r_x(p1, p2);
+    double r_y = p1.y - p2.y;
+    double r_z = p1.z - p2.z;
+    double t = p1.t - p2.t;  
+
+    double K_perp = std::sqrt(K.x * K.x + K.y * K.y);
+    double K_long = std::sqrt(K.t * K.t - K.z * K.z);
+    
+    double rho_out = (r_x * K.x / K_perp) + (r_y * K.y / K_perp) - (K_perp / K_long) * (K.t * t - K.z * r_z);
+    double rho_side = (-r_x * K.y / K_perp) + (r_y * K.x / K_perp);
+    double rho_long = (K.t * r_z - K.z * t) / K_long;
+
+    return std::sqrt(rho_out * rho_out + rho_side * rho_side + rho_long * rho_long);
+}
+
 
 ```
