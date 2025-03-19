@@ -118,13 +118,13 @@ $$K^{\mu}= \dfrac{1}{2} (p_1^{\mu}+p_2^{\mu} ), \quad r_x=\sqrt{x_1^2-x_2^2} $$
 Ezután ezen függvényeket dekralártam cpp-ban!
 
 ```cpp
-
 struct FourVector {
     double t, x, y, z;
 };
 
 struct Particle {
     double m, px, py, pz, x, y, z, t;
+    int id, ist;
 };
 
 FourVector compute_K(const Particle& p1, const Particle& p2) {
@@ -163,25 +163,34 @@ Ezután maga a számoló ciklus(ok):
 ```cpp
   int nEntries = tree->GetEntries();
   
-  for (int iEvent = 0; iEvent < nEntries; iEvent++) {
-    tree->GetEntry(iEvent);
-    std::cerr << "Processing event " << iEvent << " with " << np << " particles." << std::endl;
+    for (int iEvent = 0; iEvent < nEntries; iEvent++) {
+        tree->GetEntry(iEvent);
+        std::cerr << "Processing event " << iEvent << " with " << np << " particles." << std::endl;
 
-    std::vector<Particle> particles;
-    particles.reserve(np);
+        std::vector<Particle> selectedParticles;
 
-    for (int i = 0; i < np; i++) {
-        particles.push_back({mass[i], px[i], py[i], pz[i], x[i], y[i], z[i], t[i]});
+        for (int i = 0; i < np; i++) {
+            if (id[i] == 120 && ist[i] == 0) {  
+                double pT = std::sqrt(px[i] * px[i] + py[i] * py[i]);
+                double eta = 0.5 * std::log((std::sqrt(px[i] * px[i] + py[i] * py[i] + pz[i] * pz[i]) + pz[i]) /
+                                            (std::sqrt(px[i] * px[i] + py[i] * py[i] + pz[i] * pz[i]) - pz[i]));
+
+                if (pT > 0.15 && pT < 1.0 && std::abs(eta) < 1.0) {  
+                    selectedParticles.push_back({mass[i], px[i], py[i], pz[i], x[i], y[i], z[i], t[i], id[i], ist[i]});
+                }
+            }
         }
-        
-        std::vector<double> rho_values;
-        
-        for (int i = 0; i < np - 1; i++) {
-            for (int j = i + 1; j < np; j++) {
-                rho_values.push_back(compute_rho_LCMS(particles[i], particles[j]));
-                }
-                }
-                std::cerr << "Computed " << rho_values.size() << " rho values." << std::endl;
-                }
 
+        std::vector<double> rho_values;
+
+        // Compute rho_LCMS for filtered particles
+        int selectedSize = selectedParticles.size();
+        for (int i = 0; i < selectedSize - 1; i++) {
+            for (int j = i + 1; j < selectedSize; j++) {
+                rho_values.push_back(compute_rho_LCMS(selectedParticles[i], selectedParticles[j]));
+            }
+        }
+
+        std::cerr << "Computed " << rho_values.size() << " rho values." << std::endl;
+    }
 ```
