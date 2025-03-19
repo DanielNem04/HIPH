@@ -141,7 +141,7 @@ double compute_r_x(const Particle& p1, const Particle& p2) {
     return std::sqrt(p1.x * p1.x - p2.x * p2.x);
 }
 
-std::tuple<double, double, double> compute_rho_LCMS(const Particle& p1, const Particle& p2, double t) {
+double compute_rho_LCMS(const Particle& p1, const Particle& p2, double t) {
     FourVector K = compute_K(p1, p2);
     double r_x = compute_r_x(p1, p2);
     double r_y = p1.y - p2.y;
