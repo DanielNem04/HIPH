@@ -135,13 +135,9 @@ FourVector compute_K(const Particle& p1, const Particle& p2) {
             0.5 * (p1.pz + p2.pz)};
 }
 
-double compute_r_x(const Particle& p1, const Particle& p2) {
-    return std::sqrt(p1.x * p1.x - p2.x * p2.x);
-}
-
 double compute_rho_LCMS(const Particle& p1, const Particle& p2) {
     FourVector K = compute_K(p1, p2);
-    double r_x = compute_r_x(p1, p2);
+    double r_x = p1.x - p2.x;
     double r_y = p1.y - p2.y;
     double r_z = p1.z - p2.z;
     double t = p1.t - p2.t;  
