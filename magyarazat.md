@@ -161,8 +161,11 @@ double compute_rho_LCMS(const Particle& p1, const Particle& p2) {
 Ezután maga a számoló ciklus(ok):
 
 ```cpp
-  int nEntries = tree->GetEntries();
-  
+ int nEntries = tree->GetEntries();
+  TH1D* h_rho = new TH1D("h_rho", "Corrected D(rho);#rho [fm];D(#rho)", 50, 0, 10.0);
+
+  std::vector<double> rho_values;
+
     for (int iEvent = 0; iEvent < nEntries; iEvent++) {
         tree->GetEntry(iEvent);
         std::cerr << "Processing event " << iEvent << " with " << np << " particles." << std::endl;
@@ -181,9 +184,6 @@ Ezután maga a számoló ciklus(ok):
             }
         }
 
-        std::vector<double> rho_values;
-
-        // Compute rho_LCMS for filtered particles
         int selectedSize = selectedParticles.size();
         for (int i = 0; i < selectedSize - 1; i++) {
             for (int j = i + 1; j < selectedSize; j++) {
@@ -193,4 +193,23 @@ Ezután maga a számoló ciklus(ok):
 
         std::cerr << "Computed " << rho_values.size() << " rho values." << std::endl;
     }
+    
+    for (double rho : rho_values) {
+        if (rho > 0.99) {  // Csak a 0.99 fm-nél nagyobb értékek kerüljenek be
+        double weight = 1.0 / (4 * M_PI * rho * rho);
+        h_rho->Fill(rho, weight);
+        }
+    }
+
+    TCanvas* c1 = new TCanvas("c1", "D(rho) Corrected", 800, 600);
+    gStyle->SetOptStat(0);
+    
+    c1->SetLogx();  
+    c1->SetLogy();  
+
+    h_rho->SetLineColor(kBlue);
+    h_rho->SetLineWidth(2);
+    h_rho->Draw();
+    
+    c1->SaveAs("D_rho_plot.png");
 ```
