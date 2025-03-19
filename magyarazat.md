@@ -157,7 +157,7 @@ std::tuple<double, double, double> compute_rho_LCMS(const Particle& p1, const Pa
     double rho_out = (r_x * K_x / K_perp) + (r_y * K_y / K_perp) - (K_perp / K_long) * (K_0 * t - K_z * r_z);
     double rho_side = (-r_x * K_y / K_perp) + (r_y * K_x / K_perp);
     double rho_long = (K_0 * r_z - K_z * t) / K_long;
-    double result = std::sqrt(rho_out*rho_out+ rho_side*rho_side+ rho_long*rho_long)
+    double result = std::sqrt(rho_out*rho_out+ rho_side*rho_side+ rho_long*rho_long);
     return result;
 }
 ```
